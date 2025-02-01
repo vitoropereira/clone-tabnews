@@ -1,61 +1,61 @@
 import useSWR from "swr";
 
-async function fetchApi(key){
-    const response = await fetch(key);
-    const responseBody = await response.json();
-    return responseBody
+async function fetchApi(key) {
+  const response = await fetch(key);
+  const responseBody = await response.json();
+  return responseBody;
 }
 
-export default function StatusPage(){
-
-return (
+export default function StatusPage() {
+  return (
     <>
-        <h1>Status</h1>
-        <UpdatedAt />
-        <DatabaseStatus />
+      <h1>Status</h1>
+      <UpdatedAt />
+      <DatabaseStatus />
     </>
-    )
+  );
 }
-
 
 function UpdatedAt() {
-    const {isLoading, data} = useSWR("/api/v1/status", fetchApi, {
-        refreshInterval: 2000,
-    })
+  const { isLoading, data } = useSWR("/api/v1/status", fetchApi, {
+    refreshInterval: 2000,
+  });
 
-    let updatedAtText = "Carregando..."
-    
-    if(!isLoading && data){
-        updatedAtText = new Date(data.updated_at).toLocaleString("pt-BR");
-    }
+  let updatedAtText = "Carregando...";
 
-    return <div>Última atualização: {updatedAtText}</div>
+  if (!isLoading && data) {
+    updatedAtText = new Date(data.updated_at).toLocaleString("pt-BR");
+  }
+
+  return <div>Última atualização: {updatedAtText}</div>;
 }
 
 function DatabaseStatus() {
-    const {isLoading, data} = useSWR("/api/v1/status", fetchApi, {
-        refreshInterval: 2000,
-    })
-console.log('data')
-console.log(data)
-    let databaseStatusInformation = "Carregando..."
+  const { isLoading, data } = useSWR("/api/v1/status", fetchApi, {
+    refreshInterval: 2000,
+  });
+  console.log("data");
+  console.log(data);
+  let databaseStatusInformation = "Carregando...";
 
-    if(!isLoading && data){
-        databaseStatusInformation = (
-            <>
-                <div>Versão: {data.dependencies.database.version}</div>
-                <div>Conexões abertas: {data.dependencies.database.max_connections}</div>
-                <div>Conexões máximas: {data.dependencies.database.opened_connections}</div>
-            </>
-        );
+  if (!isLoading && data) {
+    databaseStatusInformation = (
+      <>
+        <div>Versão: {data.dependencies.database.version}</div>
+        <div>
+          Conexões abertas: {data.dependencies.database.max_connections}
+        </div>
+        <div>
+          Conexões máximas: {data.dependencies.database.opened_connections}
+        </div>
+      </>
+    );
 
-        return (
-            <>
-                <h2>Database</h2>
-                <div>{databaseStatusInformation}</div>
-            </>
-        )
-    }
-
-
+    return (
+      <>
+        <h2>Database</h2>
+        <div>{databaseStatusInformation}</div>
+      </>
+    );
+  }
 }
