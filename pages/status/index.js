@@ -31,25 +31,29 @@ function UpdatedAt() {
 }
 
 function DatabaseStatus() {
-    const { isLoading, data } = useSWR("/api/v1/status", fetchApi, {
-      refreshInterval: 2000,
-    });
-  
-    console.log("data");
-    console.log(data);
-  
-    if (isLoading || !data) {
-      return <div>Carregando...</div>;
-    }
-  
-    return (
-      <>
-        <h2>Database</h2>
-        <div>
-          <div>Versão: {data.dependencies.database.version}</div>
-          <div>Conexões abertas: {data.dependencies.database.opened_connections}</div>
-          <div>Conexões máximas: {data.dependencies.database.max_connections}</div>
-        </div>
-      </>
-    );
+  const { isLoading, data } = useSWR("/api/v1/status", fetchApi, {
+    refreshInterval: 2000,
+  });
+
+  console.log("data");
+  console.log(data);
+
+  if (isLoading || !data) {
+    return <div>Carregando...</div>;
   }
+
+  return (
+    <>
+      <h2>Database</h2>
+      <div>
+        <div>Versão: {data.dependencies.database.version}</div>
+        <div>
+          Conexões abertas: {data.dependencies.database.opened_connections}
+        </div>
+        <div>
+          Conexões máximas: {data.dependencies.database.max_connections}
+        </div>
+      </div>
+    </>
+  );
+}
